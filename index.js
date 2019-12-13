@@ -148,6 +148,7 @@ class PokemonBattleApp {
   renderPokemonList() {
     if (!this.pokemonList) {
       const listNode = document.createElement('div');
+      listNode.classList.add('pokemonList');
       this.root.appendChild(listNode);
 
       this.pokemonList = new PokemonList(listNode);

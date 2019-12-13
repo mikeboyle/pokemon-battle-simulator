@@ -1,0 +1,27 @@
+#root {
+  text-align: center;
+  max-width: 960px;
+}
+
+.pokemonList {
+  display: flex;
+  align-items: center;
+}
+
+.pokemon {
+  flex-basis: 50%;
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+  background: #ddd;
+}
+
+.pokemon img {
+  height: 128px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 25%;
+}
