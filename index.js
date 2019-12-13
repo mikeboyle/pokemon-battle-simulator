@@ -38,14 +38,30 @@ class PokemonList {
     this.root = rootNode;
   }
 
+  pokemonsChanged(newPokemons) {
+    if (!this.pokemons) return true;
+    if (this.pokemons.length !== newPokemons.length) return true;
+    if (this.pokemons.legth === 0 && newPokemons.length === 0) return false;
+
+    const mergedPokemonsSet = this.pokemons.map(p => p.name);
+    newPokemons.forEach(np => {
+      if (!mergedPokemonsSet.includes(np.name)) {
+        mergedPokemonsSet.push(np);
+      }
+    });
+    return mergedPokemonsSet.length > this.pokemons.length;
+  }
+
   render(pokemons) {
+    if (!this.pokemonsChanged(pokemons)) return;
     // clear old views
     this.root.innerHTML = "";
 
     // create new views from the pokemon
     pokemons.forEach(pokemon => {
       this.root.append(pokemon.render());
-    })
+    });
+    this.pokemons = pokemons;
   }
 }
 
