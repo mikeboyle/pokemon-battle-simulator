@@ -104,26 +104,23 @@ class PokemonBattleApp {
     }
 
     this.root = rootNode;
-    this.initialize();
-  }
-
-  initialize() {
-    this.setupTitle();
-    this.setupGetPokemonButton();
-    this.pokemonList = this.setupPokemonList();
-    this.battleButton = this.setupBattleButton();
-    this.battleResultsList = this.setupBattleResultsList();
     this.getPokemons();
   }
 
-  setupTitle() {
+  renderTitle() {
+    if (document.getElementById('title')) return;
+
     const title = document.createElement('h1');
+    title.id = 'title';
     title.innerText = 'Pokemon Battle Simulator';
     this.root.appendChild(title);
   }
 
-  setupGetPokemonButton() {
+  renderGetPokemonButton() {
+    if (document.getElementById('getPokemon')) return;
+
     const button = document.createElement('button')
+    button.id = 'getPokemon';
     button.innerText = 'Get Pokemon';
     this.root.appendChild(button);
 
@@ -132,28 +129,44 @@ class PokemonBattleApp {
     });
   }
 
-  setupPokemonList() {
-    const listNode = document.createElement('div');
-    this.root.appendChild(listNode);
-    return new PokemonList(listNode);
+  renderPokemonList() {
+    if (!this.pokemonList) {
+      const listNode = document.createElement('div');
+      this.root.appendChild(listNode);
+
+      this.pokemonList = new PokemonList(listNode);
+    }
+
+    const { pokemons } = this.data;
+    this.pokemonList.render(pokemons);
   }
 
-  setupBattleButton() {
-    const { pokemon } = this.data;
+  renderBattleButton() {
+    if (!this.battleButton) {
+      const buttonNode = document.createElement('div');
+      this.root.appendChild(buttonNode);
 
-    const buttonNode = document.createElement('div');
-    this.root.appendChild(buttonNode);
-    const onClick = () => { this.battle(); }
-    return new BattleButton(buttonNode, onClick);
+      const onClick = () => { this.battle(); }
+      this.battleButton = new BattleButton(buttonNode, onClick);
+    }
+
+    const { pokemons } = this.data;
+    this.battleButton.render(pokemons);
   }
 
-  setupBattleResultsList() {
-    const h1 = document.createElement('h1');
-    h1.innerText = 'Battle Results';
-    const ul = document.createElement('ul');
-    this.root.appendChild(h1);
-    this.root.appendChild(ul);
-    return new BattleResultsList(ul);
+  renderBattleResultsList() {
+    if (!this.battleResultsList) {
+      const h1 = document.createElement('h1');
+      h1.innerText = 'Battle Results';
+      const ul = document.createElement('ul');
+      this.root.appendChild(h1);
+      this.root.appendChild(ul);
+
+      this.battleResultsList = new BattleResultsList(ul);
+    }
+
+    const { battleResults } = this.data;
+    this.battleResultsList.render(battleResults);
   }
 
   battle() {
@@ -201,10 +214,11 @@ class PokemonBattleApp {
   }
 
   render() {
-    const { battleResults, pokemons } = this.data;
-    this.pokemonList.render(pokemons);
-    this.battleButton.render(pokemons);
-    this.battleResultsList.render(battleResults);
+    this.renderTitle();
+    this.renderGetPokemonButton();
+    this.renderPokemonList();
+    this.renderBattleButton();
+    this.renderBattleResultsList();
   }
 }
 
